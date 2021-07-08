@@ -1,4 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http'
+import { environment } from 'src/environments/environment';
+
+interface Character{
+  name: string;
+  image: string;
+}
+
+interface Characters {
+  results: Character[];
+}
 
 @Component({
   selector: 'app-phones-page',
@@ -7,9 +18,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PhonesPageComponent implements OnInit {
 
-  constructor() { }
+  characters: Characters = {results: []};
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
+    this.http.get<Characters>(`${environment.apiURL}`)
+      .subscribe(characters => {
+        this.characters = characters;
+        console.log(characters)
+      })
+      
   }
+  
 
 }
